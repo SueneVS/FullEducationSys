@@ -1,4 +1,4 @@
-package com.senai.fulleducationsys.entity;
+package com.senai.fulleducationsys.datasource.entity;
 
 
 import jakarta.persistence.*;
@@ -19,7 +19,7 @@ public class DocenteEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_docente", nullable = false)
-    private int docenteId;
+    private Long docenteId;
 
     @Column(name = "nome", length = 150, nullable = false)
     private String nome;
@@ -29,7 +29,8 @@ public class DocenteEntity implements Serializable {
     @ColumnDefault(value ="CURRENT_TIMESTAMP")
     private LocalDate dataEntrada;
 
-    @OneToOne(optional = false)
+
+    @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_usuario", unique = true)
     private UsuarioEntity usuario;
 

@@ -1,12 +1,13 @@
-package com.senai.fulleducationsys.entity;
+package com.senai.fulleducationsys.datasource.entity;
 
+import com.senai.fulleducationsys.controller.dto.request.LoginRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Data
@@ -18,7 +19,7 @@ public class UsuarioEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario", nullable = false)
-    private int usuarioId;
+    private Long usuarioId;
 
     @Column(name = "login", unique = true, length = 150, nullable = false)
     private String login;
@@ -30,18 +31,21 @@ public class UsuarioEntity implements Serializable {
     @JoinColumn(name = "id_papel")
     private PapelEntity papel;
 
-    @OneToOne(mappedBy = "usuario")
-    private DocenteEntity docente;
+    public boolean senhaValida(
+            LoginRequest loginRequest,
+            BCryptPasswordEncoder bCryptEncoder
+    ) {
+        return bCryptEncoder.matches(
+                loginRequest.senha(),
+                this.senha
+        );
+    }
 
-    @OneToOne(mappedBy = "usuario")
-    private AlunoEntity aluno;
 
-
-    public UsuarioEntity(String login, PapelEntity papel, DocenteEntity docente, AlunoEntity aluno) {
+    public UsuarioEntity(String login, PapelEntity papel) {
         this.login = login;
         this.papel = papel;
-        this.docente = docente;
-        this.aluno = aluno;
     }
+
 }
 
