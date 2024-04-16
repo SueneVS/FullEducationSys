@@ -1,4 +1,4 @@
-package com.senai.fulleducationsys.entity;
+package com.senai.fulleducationsys.datasource.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ public class MateriaEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_materia", nullable = false)
-    private int materiaId;
+    private Long materiaId;
 
     @Column(name = "nome", length = 150, nullable = false)
     private String nome;

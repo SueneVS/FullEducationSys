@@ -1,4 +1,4 @@
-package com.senai.fulleducationsys.entity;
+package com.senai.fulleducationsys.datasource.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,13 +17,13 @@ public class TurmaEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_turma", nullable = false)
-    private int turmaId;
+    private Long turmaId;
 
     @Column(name = "nome", length = 150, nullable = false)
     private String nome;
 
-    @OneToMany(mappedBy="turma", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    private List<AlunoEntity> alunos;
+    //@OneToMany(mappedBy="turma", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    //private List<AlunoEntity> alunos;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_professor")
@@ -34,9 +34,8 @@ public class TurmaEntity implements Serializable {
     private CursoEntity curso;
 
 
-    public TurmaEntity(String nome, List<AlunoEntity> alunos, DocenteEntity professor, CursoEntity curso) {
+    public TurmaEntity(String nome, DocenteEntity professor, CursoEntity curso) {
         this.nome = nome;
-        this.alunos = alunos;
         this.professor = professor;
         this.curso = curso;
     }
