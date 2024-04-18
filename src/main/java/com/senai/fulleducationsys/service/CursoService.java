@@ -56,7 +56,7 @@ public class CursoService {
 
         cursoRepository.save(cursoAtualizado);
 
-        return new CursoResponse(cursoAtualizado.getCursoId(), cursoRequest.nome());
+        return new CursoResponse(cursoAtualizado.getCursoId(), cursoAtualizado.getNomeCurso());
     }
 
     public List<CursoResponse> delete(Long id, String token) {

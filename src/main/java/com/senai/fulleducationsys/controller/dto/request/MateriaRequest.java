@@ -1,5 +1,4 @@
 package com.senai.fulleducationsys.controller.dto.request;
 
-public record CursoRequest(String nome){
-
+public record MateriaRequest(String nome, Long cursoId) {
 }

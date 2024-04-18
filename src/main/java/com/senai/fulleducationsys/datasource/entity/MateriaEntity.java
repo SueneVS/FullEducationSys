@@ -20,15 +20,15 @@ public class MateriaEntity implements Serializable {
     private Long materiaId;
 
     @Column(name = "nome", length = 150, nullable = false)
-    private String nome;
+    private String nomeMateria;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_curso")
     private CursoEntity curso;
 
 
-    public MateriaEntity(String nome, CursoEntity curso) {
-        this.nome = nome;
+    public MateriaEntity(String nomeMateria, CursoEntity curso) {
+        this.nomeMateria = nomeMateria;
         this.curso = curso;
     }
 }

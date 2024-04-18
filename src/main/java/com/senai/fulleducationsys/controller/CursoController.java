@@ -23,7 +23,7 @@ public class CursoController {
             @Validated @RequestBody CursoRequest cursoRequest,
             @RequestHeader (name = "Authorization") String token) {
         cursoService.create(cursoRequest, token.substring(7));
-        return ResponseEntity.ok("Curso Salvo!");
+        return ResponseEntity.ok("Curso criado com sucesso!");
     }
 
     @GetMapping({"/{id}"})
