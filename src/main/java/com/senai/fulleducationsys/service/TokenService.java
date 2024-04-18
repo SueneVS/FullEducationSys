@@ -49,7 +49,7 @@ public class TokenService {
 
         Instant now = Instant.now();
 
-        String scope = usuarioEntity.getPapel().getNome();
+        String scope = usuarioEntity.getPapel().getNomePapel();
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("FullEducationSys")

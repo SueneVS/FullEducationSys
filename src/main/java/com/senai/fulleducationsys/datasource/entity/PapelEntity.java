@@ -20,10 +20,10 @@ public class PapelEntity implements Serializable {
         private Long papelId;
 
         @Column(name = "nome", unique = true, length = 150, nullable = false)
-        private String nome;
+        private String nomePapel;
 
         public PapelEntity(String nome) {
-                this.nome = nome;
+                this.nomePapel = nome;
         }
 
 }

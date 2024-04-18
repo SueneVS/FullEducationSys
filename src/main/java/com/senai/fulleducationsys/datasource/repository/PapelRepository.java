@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface PapelRepository extends JpaRepository<PapelEntity, Long> {
-    Optional<PapelEntity> findByNome(String nome);
+    Optional<PapelEntity> findByNomePapel(String nome);
 }

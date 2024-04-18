@@ -21,27 +21,25 @@ public class UsuarioService {
     private final PapelRepository papelRepository;
     private final TokenService tokenService;
 
-    public void cadastraNovoUsuario(
-          InserirUsuarioRequest inserirUsuarioRequest, String token
-    ) {
+    public void cadastraNovoUsuario(InserirUsuarioRequest inserirUsuarioRequest, String token) {
 
         String papel =  tokenService.buscaCampo(token, "scope");
         if (!papel.equals("ADM")){
             throw new RuntimeException("Acesso não autorizado.");
         }
 
-        boolean usuarioExsite = usuarioRepository
+        boolean usuarioExiste = usuarioRepository
                 .findByLogin(inserirUsuarioRequest.login())
                 .isPresent();
 
-        if (usuarioExsite) {
+        if (usuarioExiste) {
             throw new RuntimeException("Usuario já existe");
         }
 
         UsuarioEntity usuario = new UsuarioEntity();
         usuario.setLogin(inserirUsuarioRequest.login());;
         usuario.setSenha(bCryptEncoder.encode(inserirUsuarioRequest.senha()));
-        usuario.setPapel(papelRepository.findByNome(inserirUsuarioRequest.nomePapel())
+        usuario.setPapel(papelRepository.findByNomePapel(inserirUsuarioRequest.nomePapel())
                         .orElseThrow(() -> new RuntimeException("Papel inválido ou inexistente"))
         );
 
