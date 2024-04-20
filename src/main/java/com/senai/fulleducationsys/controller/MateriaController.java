@@ -23,9 +23,9 @@ public class MateriaController {
 
     @GetMapping("/cursos/{id_curso}/materias")
     public ResponseEntity<List<MateriaResponse>> getMateriasPorCurso(
-            @PathVariable(name = "id_curso") Long idCurso) {
+            @RequestHeader(name = "Authorization") String token,  @PathVariable("id_curso") Long cursoId){
 
-        List<MateriaResponse> materias = materiaService.getMateriasPorCurso(idCurso);
+        List<MateriaResponse> materias = materiaService.getMateriasPorCurso(cursoId, token.substring(7));
 
         return ResponseEntity.ok(materias);
     }

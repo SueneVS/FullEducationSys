@@ -1,4 +1,4 @@
 package com.senai.fulleducationsys.controller.dto.response;
 
-public record MateriaResponse(Long id, String nome, Long cursoId) {
+public record MateriaResponse(Long materiaId, String nome, Long cursoId) {
 }
