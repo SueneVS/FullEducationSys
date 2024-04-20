@@ -22,8 +22,8 @@ public class TurmaEntity implements Serializable {
     @Column(name = "nome", length = 150, nullable = false)
     private String nome;
 
-    //@OneToMany(mappedBy="turma", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    //private List<AlunoEntity> alunos;
+    @OneToMany(mappedBy="turma", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<AlunoEntity> alunos;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_professor")
