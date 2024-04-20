@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Data
@@ -29,7 +30,7 @@ public class AlunoEntity {
     @Column(name = "data_nascimento", nullable = false)
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
-    private LocalDate dataNascimento;
+    private Date dataNascimento;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_usuario", unique = true)
@@ -40,7 +41,7 @@ public class AlunoEntity {
     private TurmaEntity turma;
 
 
-    public AlunoEntity(String nome, LocalDate dataNascimento, UsuarioEntity usuario, TurmaEntity turma) {
+    public AlunoEntity(String nome, Date dataNascimento, UsuarioEntity usuario, TurmaEntity turma) {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.usuario = usuario;
