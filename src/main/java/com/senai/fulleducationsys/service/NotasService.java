@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -94,7 +95,7 @@ public class NotasService {
 
     }
 
-    public List<NotasResponse> getNotasPorAluno(Long notasId, String token) {
+    public List<Double> getNotasPorAluno(Long notasId, String token) {
         String papel =  tokenService.buscaCampo(token, "scope");
         if (!papel.equals("ADM") && !papel.equals("PEDAGOGICO") && !papel.equals("RECRUITER")){
             throw new RuntimeException("Acesso não autorizado.");
@@ -106,13 +107,8 @@ public class NotasService {
             throw new RuntimeException("Não há notass cadastrados.");
         }
 
-        return notas.stream().map(
-                nota -> new NotasResponse(
-                        nota.getNotasId(),
-                        nota.getAluno().getAlunoId(),
-                        nota.getProfessor().getDocenteId(),
-                        nota.getMateria().getMateriaId(),
-                        nota.getNota(),nota.getDataNota()
-                )).toList();
+        return notas.stream()
+                .map(NotasEntity::getNota)
+                .collect(Collectors.toList());
     }
 }

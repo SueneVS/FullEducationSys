@@ -14,9 +14,6 @@ import java.util.List;
 @RequestMapping("notas")
 
 
-
-
-
 public class NotasController {
     private final NotasService notasService;
 
@@ -59,10 +56,10 @@ public class NotasController {
     }
 
     @GetMapping("/alunos/{id_aluno}/notas")
-    public ResponseEntity<List<NotasResponse>> getNotasPorAluno(
+    public ResponseEntity<List<Double>> getNotasPorAluno(
             @RequestHeader (name = "Authorization") String token, @PathVariable("id_aluno") Long alunoId) {
 
-        List<NotasResponse> notas = notasService.getNotasPorAluno(alunoId, token.substring(7));
+        List<Double> notas = notasService.getNotasPorAluno(alunoId, token.substring(7));
 
         return ResponseEntity.ok(notas);
     }
