@@ -38,7 +38,7 @@ public class NotasEntity implements Serializable {
     @ColumnDefault(value = "0.00")
     private Double nota;
 
-    @Column(name = "data_nota")
+    @Column(name = "data_nota", nullable = false)
     @ColumnDefault(value ="CURRENT_TIMESTAMP")
     private LocalDate dataNota;
 

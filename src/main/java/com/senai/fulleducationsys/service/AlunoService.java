@@ -30,7 +30,7 @@ public class AlunoService {
         UsuarioEntity usuario = usuarioRepository.findById(alunoRequest.usuarioId())
                 .orElseThrow(() -> new RuntimeException("Aluno não encontrado com o ID:" + alunoRequest.usuarioId()));
         TurmaEntity turma = turmaRepository.findById(alunoRequest.turmaId())
-                .orElseThrow(() -> new RuntimeException("Aluno não encontrado com o ID:" + alunoRequest.usuarioId()));
+                .orElseThrow(() -> new RuntimeException("Aluno não encontrado com o ID:" + alunoRequest.turmaId()));
 
         AlunoEntity alunoEntity = new AlunoEntity();
         alunoEntity.setUsuario(usuario);
