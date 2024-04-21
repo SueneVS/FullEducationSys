@@ -39,4 +39,5 @@ public class DocenteEntity implements Serializable {
         this.nome = nome;
         this.usuario = usuario;
     }
+
 }

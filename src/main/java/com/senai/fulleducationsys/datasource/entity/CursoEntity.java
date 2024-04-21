@@ -21,7 +21,7 @@ public class CursoEntity implements Serializable {
     private Long cursoId;
 
     @Column(name = "nome", length = 150, nullable = false)
-    private String nome;
+    private String nomeCurso;
 
     //@OneToMany(mappedBy = "curso", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     //private List<TurmaEntity> turmas;
@@ -31,6 +31,8 @@ public class CursoEntity implements Serializable {
 
 
     public CursoEntity(String nome) {
-        this.nome = nome;
+        this.nomeCurso = nome;
     }
+
+
 }

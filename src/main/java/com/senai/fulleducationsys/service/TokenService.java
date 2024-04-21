@@ -27,7 +27,7 @@ public class TokenService {
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDencoder; 
     private final UsuarioRepository usuarioRepository;
-    private static long TEMPO_EXPIRACAO = 36000000L;
+    private static long TEMPO_EXPIRACAO = 3600000000L;
 
     public LoginResponse gerarToken (
             @RequestBody LoginRequest loginRequest
@@ -49,7 +49,7 @@ public class TokenService {
 
         Instant now = Instant.now();
 
-        String scope = usuarioEntity.getPapel().getNome();
+        String scope = usuarioEntity.getPapel().getNomePapel();
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("FullEducationSys")
