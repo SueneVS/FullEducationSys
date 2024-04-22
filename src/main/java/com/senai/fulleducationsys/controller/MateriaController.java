@@ -33,7 +33,7 @@ public class MateriaController {
 
     @PostMapping("/cursos/{id_curso}")
     public ResponseEntity<String> create(
-            @Validated @RequestBody CursoRequest materiaRequest,
+            @Validated @RequestBody MateriaRequest materiaRequest,
             @RequestHeader(name = "Authorization") String token,  @PathVariable("id_curso") Long cursoId) {
         materiaService.create(materiaRequest, token.substring(7), cursoId);
         return ResponseEntity.ok("Materia criada com sucesso!");

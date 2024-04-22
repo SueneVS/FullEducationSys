@@ -47,4 +47,5 @@ public class AlunoEntity {
         this.usuario = usuario;
         this.turma = turma;
     }
+
 }

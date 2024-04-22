@@ -4,6 +4,8 @@ import com.senai.fulleducationsys.controller.dto.request.LoginRequest;
 import com.senai.fulleducationsys.controller.dto.response.LoginResponse;
 import com.senai.fulleducationsys.datasource.entity.UsuarioEntity;
 import com.senai.fulleducationsys.datasource.repository.UsuarioRepository;
+import com.senai.fulleducationsys.infra.exception.CustomException.CampoObrigatorioException;
+import com.senai.fulleducationsys.infra.exception.CustomException.NotFoundException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,13 +40,13 @@ public class TokenService {
                 .orElseThrow(
                         ()->{
                             log.error("Erro, usuário não existe");
-                            return new RuntimeException("Erro, usuário não existe");
+                            return new NotFoundException("Erro, usuário não existe");
                         }
                 );
 
         if(!usuarioEntity.senhaValida(loginRequest, bCryptEncoder)){
             log.error("Erro, senha incorreta");
-            throw new RuntimeException("Erro, senha incorreta");
+            throw new CampoObrigatorioException("Erro, senha incorreta");
         }
 
         Instant now = Instant.now();
