@@ -56,10 +56,10 @@ public class NotasController {
     }
 
     @GetMapping("/alunos/{id_aluno}/notas")
-    public ResponseEntity<List<Double>> getNotasPorAluno(
+    public ResponseEntity<List<NotasResponse>> getNotasPorAluno(
             @RequestHeader (name = "Authorization") String token, @PathVariable("id_aluno") Long alunoId) {
 
-        List<Double> notas = notasService.getNotasPorAluno(alunoId, token.substring(7));
+        List<NotasResponse> notas = notasService.getNotasPorAluno(alunoId, token.substring(7));
 
         return ResponseEntity.ok(notas);
     }

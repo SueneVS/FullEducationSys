@@ -1,6 +1,7 @@
 package com.senai.fulleducationsys.controller;
 
 import com.senai.fulleducationsys.controller.dto.request.InserirUsuarioRequest;
+import com.senai.fulleducationsys.controller.dto.response.UsuarioResponse;
 import com.senai.fulleducationsys.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +14,14 @@ public class UsuarioCadastroController {
     private final UsuarioService usuarioService;
 
     @PostMapping("/cadastros")
-    public ResponseEntity<String> novoUsuario(
+    public ResponseEntity<UsuarioResponse> novoUsuario(
             @Validated @RequestBody InserirUsuarioRequest inserirUsuarioRequest,
             @RequestHeader(name = "Authorization") String token
             ) {
 
-        usuarioService.cadastraNovoUsuario(inserirUsuarioRequest, token.substring(7));
+        UsuarioResponse  usuarioResponse = usuarioService.cadastraNovoUsuario(inserirUsuarioRequest, token.substring(7));
 
-        return ResponseEntity.ok("Usuario Salvo!");
+        return ResponseEntity.ok(usuarioResponse);
     }
 
 }

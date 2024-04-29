@@ -15,4 +15,11 @@ public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
                     " where t.curso.cursoId = :id"
     )
     List<MateriaEntity> findAllByCursoId(@Param("id")Long cursoId);
+
+    @Query(
+            "SELECT CASE WHEN COUNT(m) > 0 THEN true ELSE false END " +
+                    "FROM MateriaEntity m " +
+                    "WHERE m.nome = :nome"
+    )
+    boolean existsByNomeMateria(@Param("nome") String nome);
 }

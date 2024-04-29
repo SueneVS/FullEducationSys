@@ -31,4 +31,5 @@ public class MateriaEntity implements Serializable {
         this.nome = nome;
         this.curso = curso;
     }
+
 }

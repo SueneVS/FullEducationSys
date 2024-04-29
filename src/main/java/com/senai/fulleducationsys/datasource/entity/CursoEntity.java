@@ -23,11 +23,11 @@ public class CursoEntity implements Serializable {
     @Column(name = "nome", length = 150, nullable = false)
     private String nomeCurso;
 
-    //@OneToMany(mappedBy = "curso", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    //private List<TurmaEntity> turmas;
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<TurmaEntity> turmas;
 
-    //@OneToMany(mappedBy = "curso", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    //private List<MateriaEntity> materias;
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<MateriaEntity> materias;
 
 
     public CursoEntity(String nome) {
