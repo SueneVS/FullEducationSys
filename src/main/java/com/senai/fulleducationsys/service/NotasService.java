@@ -86,13 +86,13 @@ public class NotasService {
 
         log.info("Criando notas-> Salvo com sucesso");
 
-        return new NotasResponse(notasRegistrada.getNotasId(), notasRegistrada.getAluno().getAlunoId(), notasRegistrada.getProfessor().getDocenteId(),
-                notasRegistrada.getMateria().getMateriaId(), notasRegistrada.getNota(), notasRegistrada.getDataNota());
+        return new NotasResponse(notasRegistrada.getNotasId(), notasRegistrada.getAluno().getNome(), notasRegistrada.getProfessor().getNome(),
+                notasRegistrada.getMateria().getNome(), notasRegistrada.getNota(), notasRegistrada.getDataNota());
     }
 
     public  NotasResponse getEntityId(Long id, String token) {
         String papel =  tokenService.buscaCampo(token, "scope");
-        if (!papel.equals("ADM") && !papel.equals("PEDAGOGICO") && !papel.equals("RECRUITER")){
+        if (!papel.equals("ADM") && !papel.equals("PROFESSOR")){
             throw new UsuarioNaoAutorizadoException("Acesso não autorizado.");
         }
 
@@ -104,13 +104,13 @@ public class NotasService {
 
         log.info("Buscando notas por id ({}) -> Encontrado", id);
 
-        return new NotasResponse(notasId.getNotasId(), notasId.getAluno().getAlunoId(), notasId.getProfessor().getDocenteId(),
-                notasId.getMateria().getMateriaId(), notasId.getNota(), notasId.getDataNota());
+        return new NotasResponse(notasId.getNotasId(), notasId.getAluno().getNome(), notasId.getProfessor().getNome(),
+                notasId.getMateria().getNome(), notasId.getNota(), notasId.getDataNota());
     }
 
     public  NotasResponse update(Long id, NotasRequest notasRequest, String token) {
         String papel =  tokenService.buscaCampo(token, "scope");
-        if (!papel.equals("ADM") && !papel.equals("PEDAGOGICO") && !papel.equals("RECRUITER")){
+        if (!papel.equals("ADM") && !papel.equals("PROFESSOR")){
             throw new UsuarioNaoAutorizadoException("Acesso não autorizado.");
         }
 
@@ -153,8 +153,8 @@ public class NotasService {
         notasRepository.save(notasAtualizada);
 
         log.info("Alterando nota -> Salvo com sucesso");
-        return new NotasResponse(notasAtualizada.getNotasId(), notasAtualizada.getAluno().getAlunoId(), notasAtualizada.getProfessor().getDocenteId(),
-                notasAtualizada.getMateria().getMateriaId(), notasAtualizada.getNota(), notasAtualizada.getDataNota());
+        return new NotasResponse(notasAtualizada.getNotasId(), notasAtualizada.getAluno().getNome(), notasAtualizada.getProfessor().getNome(),
+                notasAtualizada.getMateria().getNome(), notasAtualizada.getNota(), notasAtualizada.getDataNota());
     }
 
     public List<NotasResponse> delete(Long id, String token) {
@@ -174,29 +174,41 @@ public class NotasService {
         List<NotasEntity> notassAtualizados = notasRepository.findAll();
 
         List<NotasResponse> notasResponses = notassAtualizados.stream()
-                .map(notas -> new NotasResponse(notas.getNotasId(), notas.getAluno().getAlunoId(), notas.getProfessor().getDocenteId(), notas.getMateria().getMateriaId(), notas.getNota(),notas.getDataNota())).toList();
+                .map(notas -> new NotasResponse(notas.getNotasId(), notas.getAluno().getNome(), notas.getProfessor().getNome(), notas.getMateria().getNome(), notas.getNota(),notas.getDataNota())).toList();
 
         return notasResponses;
 
     }
 
-    public List<Double> getNotasPorAluno(Long notasId, String token) {
+    public List<NotasResponse> getNotasPorAluno(Long alunoId, String token) {
         String papel =  tokenService.buscaCampo(token, "scope");
-        if (!papel.equals("ADM") && !papel.equals("PEDAGOGICO") && !papel.equals("RECRUITER")){
+        Long usuarioIdNoToken = Long.valueOf(tokenService.buscaCampo(token, "sub"));
+
+
+        if (!papel.equals("ADM") && !papel.equals("PROFESSOR") && !papel.equals("ALUNO")){
             throw new UsuarioNaoAutorizadoException("Acesso não autorizado.");
+        } else if (papel.equals("ALUNO") && !alunoId.equals(usuarioIdNoToken)) {
+            throw new UsuarioNaoAutorizadoException("Acesso não autorizado para acessar notas de outro aluno.");
         }
 
-        List<NotasEntity> notas = notasRepository.findAllByAlunoId(notasId);
+        List<NotasEntity> notas = notasRepository.findAllByAlunoId(alunoId);
 
         if(notas.isEmpty()){
             log.error("Erro, notas não existem");
             throw new NotFoundException("Não há notas cadastrados.");
         }
 
-        log.info("Buscando todos os docentes -> {} Encontrados", notas.size());
+        log.info("Buscando todas as notas -> {} Encontrados", notas.size());
 
         return notas.stream()
-                .map(NotasEntity::getNota)
+                .map(nota -> new NotasResponse(
+                        nota.getNotasId(),
+                        nota.getAluno().getNome(),
+                        nota.getProfessor().getNome(),
+                        nota.getMateria().getNome(),
+                        nota.getNota(),
+                        nota.getDataNota()))
                 .collect(Collectors.toList());
     }
-}
+    }
+

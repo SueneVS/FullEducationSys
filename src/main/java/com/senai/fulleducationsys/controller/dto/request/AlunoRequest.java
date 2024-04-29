@@ -1,7 +1,8 @@
 package com.senai.fulleducationsys.controller.dto.request;
 
 
-import java.util.Date;
+import java.time.LocalDate;
 
-public record AlunoRequest(String nome, Date dataNascimento, Long usuarioId, Long turmaId) {
+
+public record AlunoRequest(String nome, LocalDate dataNascimento, Long usuarioId, Long turmaId) {
 }

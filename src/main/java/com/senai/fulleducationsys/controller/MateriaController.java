@@ -35,7 +35,7 @@ public class MateriaController {
     public ResponseEntity<String> create(
             @Validated @RequestBody MateriaRequest materiaRequest,
             @RequestHeader(name = "Authorization") String token,  @PathVariable("id_curso") Long cursoId) {
-        materiaService.create(materiaRequest, token.substring(7), cursoId);
+        materiaService.create(materiaRequest, token.substring(7));
         return ResponseEntity.ok("Materia criada com sucesso!");
     }
 

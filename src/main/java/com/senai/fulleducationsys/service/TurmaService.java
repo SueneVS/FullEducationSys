@@ -11,6 +11,7 @@ import com.senai.fulleducationsys.datasource.repository.CursoRepository;
 import com.senai.fulleducationsys.datasource.repository.DocenteRepository;
 import com.senai.fulleducationsys.datasource.repository.TurmaRepository;
 
+import com.senai.fulleducationsys.infra.exception.CustomException.CadastroDuplicadoException;
 import com.senai.fulleducationsys.infra.exception.CustomException.CampoObrigatorioException;
 import com.senai.fulleducationsys.infra.exception.CustomException.NotFoundException;
 import com.senai.fulleducationsys.infra.exception.CustomException.UsuarioNaoAutorizadoException;
@@ -56,6 +57,10 @@ public class TurmaService {
             throw new CampoObrigatorioException(erros.toString());
         }
 
+        if (turmaRepository.existsByNomeTurma(turmaRequest.nome())) {
+            throw new CadastroDuplicadoException("Já existe uma turma com o mesmo nome");
+        }
+
         DocenteEntity professor = docenteRepository.findById(turmaRequest.professorId())
                 .orElseThrow(() -> {
                     log.error("Erro, usuario não encontrado");
@@ -76,7 +81,7 @@ public class TurmaService {
 
         log.info("Criando turmas-> Salvo com sucesso");
         return new TurmaResponse(turmaRegistrado.getTurmaId(),
-                turmaRegistrado.getNome(), turmaRegistrado.getProfessor().getDocenteId(), turmaRegistrado.getCurso().getNomeCurso());
+                turmaRegistrado.getNome(), turmaRegistrado.getProfessor().getNome(), turmaRegistrado.getCurso().getNomeCurso());
     }
 
     public  TurmaResponse getEntityIdDto(Long id, String token) {
@@ -93,7 +98,7 @@ public class TurmaService {
 
         log.info("Buscando turma por id ({}) -> Encontrado", id);
 
-        return new TurmaResponse(turmaId.getTurmaId(), turmaId.getNome(), turmaId.getProfessor().getDocenteId(), turmaId.getCurso().getNomeCurso());
+        return new TurmaResponse(turmaId.getTurmaId(), turmaId.getNome(), turmaId.getProfessor().getNome(), turmaId.getCurso().getNomeCurso());
     }
 
     public  TurmaResponse update(Long id, TurmaRequest turmaRequest, String token) {
@@ -131,7 +136,7 @@ public class TurmaService {
         turmaRepository.save(turmaAtualizado);
 
         log.info("Alterando turma -> Salvo com sucesso");
-        return new TurmaResponse(turmaAtualizado.getTurmaId(), turmaAtualizado.getNome(), turmaAtualizado.getProfessor().getDocenteId(), turmaAtualizado.getCurso().getNomeCurso());
+        return new TurmaResponse(turmaAtualizado.getTurmaId(), turmaAtualizado.getNome(), turmaAtualizado.getProfessor().getNome(), turmaAtualizado.getCurso().getNomeCurso());
     }
 
     public List<TurmaResponse> delete(Long id, String token) {
@@ -151,7 +156,7 @@ public class TurmaService {
         List<TurmaEntity> turmasAtualizados = turmaRepository.findAll();
 
         List<TurmaResponse> turmaResponse = turmasAtualizados.stream()
-                .map(turma -> new TurmaResponse(turma.getTurmaId(), turma.getNome(), turma.getProfessor().getDocenteId(), turma.getCurso().getNomeCurso())).collect(Collectors.toList());
+                .map(turma -> new TurmaResponse(turma.getTurmaId(), turma.getNome(), turma.getProfessor().getNome(), turma.getCurso().getNomeCurso())).collect(Collectors.toList());
 
         return turmaResponse;
 
@@ -171,6 +176,6 @@ public class TurmaService {
         }
         log.info("Buscando todos os docentes -> {} Encontrados", turmas.size());
         return turmas.stream().map(
-                turma -> new TurmaResponse(turma.getTurmaId(), turma.getNome(), turma.getProfessor().getDocenteId(), turma.getCurso().getNomeCurso())).collect(Collectors.toList());
+                turma -> new TurmaResponse(turma.getTurmaId(), turma.getNome(), turma.getProfessor().getNome(), turma.getCurso().getNomeCurso())).collect(Collectors.toList());
     }
 }

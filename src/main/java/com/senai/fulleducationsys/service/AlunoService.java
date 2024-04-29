@@ -84,12 +84,12 @@ public class AlunoService {
         log.info("Criando aluno-> Salvo com sucesso");
 
         return new AlunoResponse(alunoRegistrado.getAlunoId(),
-                alunoRegistrado.getNome(), alunoRegistrado.getDataNascimento(), alunoRegistrado.getUsuario().getUsuarioId(), alunoRegistrado.getTurma().getNome());
+                alunoRegistrado.getNome(), alunoRegistrado.getDataNascimento(), alunoRegistrado.getUsuario().getLogin(), alunoRegistrado.getTurma().getNome());
     }
 
     public  AlunoResponse getEntityIdDto(Long id, String token) {
         String papel =  tokenService.buscaCampo(token, "scope");
-        if (!papel.equals("ADM") && !papel.equals("PEDAGOGICO") && !papel.equals("RECRUITER")){
+        if (!papel.equals("ADM") && !papel.equals("PEDAGOGICO")){
             log.error("Erro, Acesso não autorizado.");
             throw new UsuarioNaoAutorizadoException("Acesso não autorizado.");
         }
@@ -103,12 +103,12 @@ public class AlunoService {
 
         log.info("Buscando aluno por id ({}) -> Encontrado", id);
 
-        return new AlunoResponse(alunoId.getAlunoId(), alunoId.getNome(), alunoId.getDataNascimento(), alunoId.getUsuario().getUsuarioId(), alunoId.getTurma().getNome());
+        return new AlunoResponse(alunoId.getAlunoId(), alunoId.getNome(), alunoId.getDataNascimento(), alunoId.getUsuario().getLogin(), alunoId.getTurma().getNome());
     }
 
     public  AlunoResponse update(Long id, AlunoRequest alunoRequest, String token) {
         String papel =  tokenService.buscaCampo(token, "scope");
-        if (!papel.equals("ADM") && !papel.equals("PEDAGOGICO") && !papel.equals("RECRUITER")){
+        if (!papel.equals("ADM") && !papel.equals("PEDAGOGICO")){
             log.error("Erro, Acesso não autorizado.");
             throw new UsuarioNaoAutorizadoException("Acesso não autorizado.");
         }
@@ -155,7 +155,7 @@ public class AlunoService {
         alunoRepository.save(alunoAtualizado);
         log.info("Alterando aluno -> Salvo com sucesso");
 
-        return new AlunoResponse(alunoAtualizado.getAlunoId(), alunoAtualizado.getNome(), alunoAtualizado.getDataNascimento(), alunoAtualizado.getUsuario().getUsuarioId(),alunoAtualizado.getTurma().getNome());
+        return new AlunoResponse(alunoAtualizado.getAlunoId(), alunoAtualizado.getNome(), alunoAtualizado.getDataNascimento(), alunoAtualizado.getUsuario().getLogin(),alunoAtualizado.getTurma().getNome());
     }
 
     public List<AlunoResponse> delete(Long id, String token) {
@@ -176,14 +176,14 @@ public class AlunoService {
         List<AlunoEntity> alunosAtualizados = alunoRepository.findAll();
 
         List<AlunoResponse> alunoResponses = alunosAtualizados.stream()
-                .map(aluno -> new AlunoResponse(aluno.getAlunoId(), aluno.getNome(), aluno.getDataNascimento(), aluno.getUsuario().getUsuarioId(), aluno.getTurma().getNome())).toList();
+                .map(aluno -> new AlunoResponse(aluno.getAlunoId(), aluno.getNome(), aluno.getDataNascimento(), aluno.getUsuario().getLogin(), aluno.getTurma().getNome())).toList();
         return alunoResponses;
 
     }
 
     public List<AlunoResponse> getEntityDto(String token) {
         String papel =  tokenService.buscaCampo(token, "scope");
-        if (!papel.equals("ADM") && !papel.equals("PEDAGOGICO") && !papel.equals("RECRUITER")){
+        if (!papel.equals("ADM") && !papel.equals("PEDAGOGICO")){
             log.error("Erro, Acesso não autorizado.");
             throw new UsuarioNaoAutorizadoException("Acesso não autorizado.");
         }
@@ -198,6 +198,6 @@ public class AlunoService {
         log.info("Buscando todos os alunos -> {} Encontrados", alunos.size());
 
         return alunos.stream().map(
-                aluno -> new AlunoResponse(aluno.getAlunoId(), aluno.getNome(), aluno.getDataNascimento(), aluno.getUsuario().getUsuarioId(), aluno.getTurma().getNome())).toList();
+                aluno -> new AlunoResponse(aluno.getAlunoId(), aluno.getNome(), aluno.getDataNascimento(), aluno.getUsuario().getLogin(), aluno.getTurma().getNome())).toList();
     }
 }

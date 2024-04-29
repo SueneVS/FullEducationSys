@@ -7,6 +7,7 @@ import com.senai.fulleducationsys.datasource.entity.CursoEntity;
 import com.senai.fulleducationsys.datasource.entity.MateriaEntity;
 import com.senai.fulleducationsys.datasource.repository.CursoRepository;
 import com.senai.fulleducationsys.datasource.repository.MateriaRepository;
+import com.senai.fulleducationsys.infra.exception.CustomException.CadastroDuplicadoException;
 import com.senai.fulleducationsys.infra.exception.CustomException.CampoObrigatorioException;
 import com.senai.fulleducationsys.infra.exception.CustomException.NotFoundException;
 import com.senai.fulleducationsys.infra.exception.CustomException.UsuarioNaoAutorizadoException;
@@ -27,7 +28,7 @@ public class MateriaService {
     private final TokenService tokenService;
     private final CursoRepository cursoRepository;
 
-    public MateriaResponse create(MateriaRequest materiaRequest, String token, Long cursoId) {
+    public MateriaResponse create(MateriaRequest materiaRequest, String token) {
 
         String papel =  tokenService.buscaCampo(token, "scope");
         if (!papel.equals("ADM")){
@@ -48,6 +49,10 @@ public class MateriaService {
             throw new CampoObrigatorioException(erros.toString());
         }
 
+        if (materiaRepository.existsByNomeMateria(materiaRequest.nome())) {
+            throw new CadastroDuplicadoException("Já existe uma materia com o mesmo nome");
+        }
+
        CursoEntity curso = cursoRepository.findById(materiaRequest.cursoId())
                .orElseThrow(
                        () ->{
@@ -63,7 +68,7 @@ public class MateriaService {
 
         log.info("Criando materia-> Salvo com sucesso");
         return new MateriaResponse(materiaRegistrada.getMateriaId(),
-                materiaRegistrada.getNome(), materiaRegistrada.getCurso().getCursoId());
+                materiaRegistrada.getNome(), materiaRegistrada.getCurso().getNomeCurso());
     }
     public  MateriaResponse getEntityIdDto(Long id, String token) {
         String papel =  tokenService.buscaCampo(token, "scope");
@@ -80,7 +85,7 @@ public class MateriaService {
 
         log.info("Buscando materia por id ({}) -> Encontrado", id);
 
-        return new MateriaResponse(materiaId.getMateriaId(), materiaId.getNome(), materiaId.getCurso().getCursoId());
+        return new MateriaResponse(materiaId.getMateriaId(), materiaId.getNome(), materiaId.getCurso().getNomeCurso());
     }
 
     public  MateriaResponse update(Long id, MateriaRequest materiaRequest, String token) {
@@ -117,7 +122,7 @@ public class MateriaService {
 
         log.info("Alterando materia -> Salvo com sucesso");
 
-        return new MateriaResponse(materiaAtualizada.getMateriaId(), materiaAtualizada.getNome(), materiaAtualizada.getCurso().getCursoId());
+        return new MateriaResponse(materiaAtualizada.getMateriaId(), materiaAtualizada.getNome(), materiaAtualizada.getCurso().getNomeCurso());
     }
 
     public List<MateriaResponse> delete(Long id, String token) {
@@ -139,7 +144,7 @@ public class MateriaService {
         List<MateriaEntity> materiasAtualizados = materiaRepository.findAll();
 
         List<MateriaResponse> materiaResponses = materiasAtualizados.stream()
-                .map(materia -> new MateriaResponse(materia.getMateriaId(), materia.getNome(), materia.getCurso().getCursoId())).toList();
+                .map(materia -> new MateriaResponse(materia.getMateriaId(), materia.getNome(), materia.getCurso().getNomeCurso())).toList();
 
         return materiaResponses;
 
@@ -165,7 +170,7 @@ public class MateriaService {
                 materia ->new MateriaResponse(
                         materia.getMateriaId(),
                         materia.getNome(),
-                        materia.getCurso().getCursoId()
+                        materia.getCurso().getNomeCurso()
                 )).toList();
     }
 

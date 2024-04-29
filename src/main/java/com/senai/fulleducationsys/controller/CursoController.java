@@ -19,11 +19,11 @@ public class CursoController {
     private final CursoService cursoService;
 
     @PostMapping()
-    public ResponseEntity<String> create(
+    public ResponseEntity<CursoResponse> create(
             @Validated @RequestBody CursoRequest cursoRequest,
             @RequestHeader (name = "Authorization") String token) {
-        cursoService.create(cursoRequest, token.substring(7));
-        return ResponseEntity.ok("Curso criado com sucesso!");
+       CursoResponse curso = cursoService.create(cursoRequest, token.substring(7));
+        return ResponseEntity.ok(curso);
     }
 
     @GetMapping({"/{id}"})

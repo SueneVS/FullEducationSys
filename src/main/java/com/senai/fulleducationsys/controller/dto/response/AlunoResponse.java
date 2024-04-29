@@ -1,5 +1,6 @@
 package com.senai.fulleducationsys.controller.dto.response;
-import java.util.Date;
+import java.time.LocalDate;
 
-public record AlunoResponse(Long alunoId, String nome, Date dataNascimento, Long usuarioId, String turmaId) {
+
+public record AlunoResponse(Long alunoId, String nome, LocalDate dataNascimento, String usuarioId, String turmaId) {
 }

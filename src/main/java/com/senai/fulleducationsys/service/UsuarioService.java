@@ -1,6 +1,8 @@
 package com.senai.fulleducationsys.service;
 
 import com.senai.fulleducationsys.controller.dto.request.InserirUsuarioRequest;
+import com.senai.fulleducationsys.controller.dto.response.UsuarioResponse;
+import com.senai.fulleducationsys.datasource.entity.PapelEntity;
 import com.senai.fulleducationsys.datasource.entity.UsuarioEntity;
 import com.senai.fulleducationsys.datasource.repository.PapelRepository;
 import com.senai.fulleducationsys.datasource.repository.UsuarioRepository;
@@ -26,7 +28,8 @@ public class UsuarioService {
     private final PapelRepository papelRepository;
     private final TokenService tokenService;
 
-    public void cadastraNovoUsuario(InserirUsuarioRequest inserirUsuarioRequest, String token) {
+
+    public UsuarioResponse cadastraNovoUsuario(InserirUsuarioRequest inserirUsuarioRequest, String token) {
 
         String papel =  tokenService.buscaCampo(token, "scope");
         if (!papel.equals("ADM")){
@@ -67,5 +70,7 @@ public class UsuarioService {
         );
         log.info("Criando usuario-> Salvo com sucesso");
         usuarioRepository.save(usuario);
+
+        return new UsuarioResponse(usuario.getUsuarioId(), usuario.getLogin(), usuario.getPapel().getNomePapel());
     }
 }
